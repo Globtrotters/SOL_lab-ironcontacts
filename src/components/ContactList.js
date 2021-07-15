@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 //Import the UI components
 import Header from './Header';
-import Table from './Table';
-import Button from './Button';
 import ContactCard from './ContactCard';
 
 //Import data from json
@@ -16,45 +14,53 @@ const contactlist = [...contactsFromJSON];
 const firstContacts = contactlist.splice(0, 5);
 
 export default function ContactList() {
-
-  //Create state
+	//Create state
 	const [contacts, setContacts] = useState(firstContacts);
 
+	//Iteration 2 - Add random contact
 	function addContact() {
-
-    //check if there are contacts left to add
+		//check if there are contacts left to add
 		if (contactlist.length === 0) return;
 
-    //create random index
-		let randomIndex = Math.floor(contactlist.length * Math.random());
+		//create random index
+		let randomIndex = Math.floor(Math.random() * contactlist.length);
 
-    //select random contact
+		//select random contact
 		let randomContact = contactlist.splice(randomIndex, 1);
 
-    //Create new array with state + new contact
+		//Create new array with state + new contact
 		let updatedContacts = [...contacts, randomContact[0]];
 
-    //Update state
+		//Update state
 		setContacts(updatedContacts);
 	}
 
+	//Iteration 3 - Sort by name and popularity
 	function sortByName() {
 
-    //Make a copy of the state array
-    let sortedContacts = [...contacts]
+		//Make a copy of the state array
+		let sortedContacts = [...contacts];
 
-    //Sort the array
-    sortedContacts.sort((a, b) => (a.name > b.name ? 1 : -1));
-		
-    //Update the state
-    setContacts(sortedContacts)
+		//Sort the array
+		//sortedContacts.sort((a, b) => (a.name > b.name ? 1 : -1));
 
-    //setContacts(contacts.slice().sort((a, b) => (a.name > b.name ? 1 : -1)));
+		sortedContacts.sort((a, b) => {
+			if(a.name > b.name) {
+				return 1
+			} else {
+				return -1
+			}
+		});
+
+		//Update the state
+		setContacts(sortedContacts);
+
+		//setContacts(contacts.slice().sort((a, b) => (a.name > b.name ? 1 : -1)));
 	}
 
 	function sortByPopularity() {
-
-    //Make a copy of the state array
+		
+		//Make a copy of the state array
 		let sortedContacts = [...contacts];
 
 		//Sort the array
@@ -66,6 +72,7 @@ export default function ContactList() {
 		//setContacts(contacts.slice().sort((a, b) => b.popularity - a.popularity));
 	}
 
+	//BONUS - Generic function to sort by either name or popularity
 	// function sortContacts(field) {
 	// 	let compareFunction;
 	// 	if (field === 'name') {
@@ -77,16 +84,20 @@ export default function ContactList() {
 	// 	setContacts(contacts.slice().sort(compareFunction));
 	// }
 
+	//Iteration 4 - delete contact
+
 	function deleteContact(id) {
 
-    //Make a copy of the state array
+		console.log("I'm in line 91 in ContactList.js", id)
+		
+		//Make a copy of the state array
 		const newList = [...contacts];
 
-    //Create the new array
-    const filteredArray = newList.filter((contact) => contact.id !== id)
+		//Create the new array
+		const filteredArray = newList.filter((contact) => contact.id !== id);
 
-    //Update the state
-    setContacts(filteredArray)
+		//Update the state
+		setContacts(filteredArray);
 
 		//setContacts(contacts.filter((contact) => contact.id !== id));
 	}
@@ -99,11 +110,11 @@ export default function ContactList() {
 				Add random
 			</button>
 
-			<button className='btn btn-primary' onClick={() => sortByName()}>
+			<button className='btn btn-primary' onClick={sortByName}>
 				Sort by name
 			</button>
 
-			<button className='btn btn-success' onClick={() => sortByPopularity()}>
+			<button className='btn btn-success' onClick={sortByPopularity}>
 				Sort by popularity
 			</button>
 
